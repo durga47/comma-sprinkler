@@ -1,44 +1,30 @@
-input_lines = (
-    "please sit spot. sit spot, sit. spot here now here.",
-    "one, two. one tree. four tree. four four. five four. six five."
-)
-
-def each_word_and_its_follower(input_line):
-    input_line = iter(input_line)
-    current_word = next(input_line)
-    for next_word in input_line:
-        yield (current_word, next_word)
-        current_word = next_word
-    yield (current_word, '')
-
-for input_line in input_lines:
-    previous_input = ''
-    current_input = input_line
-    while (previous_input != current_input):
-
-        previous_input = current_input
-        splitted_input = current_input.split()
-
-        rule_1_words = set(
-            follower.rstrip(',.') 
-            for (current_word, follower) in each_word_and_its_follower(splitted_input) 
-            if current_word.endswith(',')
-        )
-        
-        rule_2_words = set(
-            current_word.rstrip(',.') 
-            for current_word in splitted_input 
-            if current_word.endswith(',')
-        )
-
-        def modify_words(previous_line):
-            for (current_word, follower) in each_word_and_its_follower(previous_line):
-                if current_word.endswith('.'):
-                    yield current_word
-                else:
-                    if (follower.rstrip(',.') in rule_1_words) or (current_word.rstrip(',.') in rule_2_words):
-                        yield f'{current_word.rstrip(",.")},'
-                    else:
-                        yield current_word
-current_input = ' '.join(modify_words(splitted_input))
-print('Input:', input_line, '\nOutput:', current_input, '\n')
+def comma(s):
+    for i in s:
+        if i[-1] == ',':
+            actual_word = i
+            word = i[:-1:]
+            ind = s.index(actual_word)
+            for i in s:
+                if i == word and (i[-1] != '.' or i[-1] != ','):
+                    k = i+','
+                    s = [k if ((i == word) and s[-1] != i) else i for i in s]
+    l=[]
+    for i in s:
+        ind = s.index(i)
+        if ind>0:
+            prev_word = s[ind-1]
+            if ((prev_word[-1] == ',') and (prev_word[-1] != '.') and s[0] != i):
+                if(i[-1]=='.'):
+                    i=i[:-1:]
+                l.append(i)
+                l.append(i+'.')
+    indices = [index for index, value in enumerate(s) if value in l]
+    for i in indices:
+        prev_word=s[i-1]
+        s=[(j+',') if j==prev_word and prev_word[-1]!=',' and prev_word[-1]!='.' else j for j in s]
+    s1=' '.join(s)
+    return s1
+s = input().split()
+a = comma(s)
+p=a.split()
+print(comma(p))
