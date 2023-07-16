@@ -1,30 +1,22 @@
-def comma(s):
-    for i in s:
-        if i[-1] == ',':
-            actual_word = i
-            word = i[:-1:]
-            ind = s.index(actual_word)
-            for i in s:
-                if i == word and (i[-1] != '.' or i[-1] != ','):
-                    k = i+','
-                    s = [k if ((i == word) and s[-1] != i) else i for i in s]
-    l=[]
-    for i in s:
-        ind = s.index(i)
-        if ind>0:
-            prev_word = s[ind-1]
-            if ((prev_word[-1] == ',') and (prev_word[-1] != '.') and s[0] != i):
-                if(i[-1]=='.'):
-                    i=i[:-1:]
-                l.append(i)
-                l.append(i+'.')
-    indices = [index for index, value in enumerate(s) if value in l]
-    for i in indices:
-        prev_word=s[i-1]
-        s=[(j+',') if j==prev_word and prev_word[-1]!=',' and prev_word[-1]!='.' else j for j in s]
-    s1=' '.join(s)
-    return s1
-s = input().split()
-a = comma(s)
-p=a.split()
-print(comma(p))
+Input
+
+The input contains one line of text. Each character is either a lowercase letter, a comma, a period, or a space. And:
+The text begins with a word.
+Between every two words in the text, there is either a single space, a comma followed by a space,
+or a period followed by a space (denoting the end of a sentence and the beginning of a new one).
+The last word of the text is followed by a period with no trailing space.
+
+Example:
+
+Input: please sit spot. sit spot, sit. spot here now here.
+Output: please, sit spot. sit spot, sit. spot, here now, here.
+
+Rules for adding commas to an existing piece of text are as follows:
+
+1.If a word anywhere in the text is preceded by a comma, find all occurrences of that word in the text, and put a comma before each of those
+occurrences, except in the case where such an occurrence is the first word of a sentence or already preceded by a comma.
+
+2.If a word anywhere in the text is succeeded by a comma, find all occurrences of that word in the text, and put a comma after each of those
+occurrences, except in the case where such an occurrence is the last word of a sentence or already succeeded by a comma.
+
+3.Apply rules 1 and 2 repeatedly until no new commas can be added using either of them.
